@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import Form from './components/Form'
+import BlogForm from './components/BlogForm'
+import BlogRender from './components/BlogRender'
+import Notification from './components/Notification'
 import LogoutButton from './components/LogoutButton'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -11,7 +13,13 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null)
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setUrl] = useState("")
+
+
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -35,6 +43,7 @@ const App = () => {
     setPassword(e.target.value)
   
   // Authentification logic here 
+
   // const handleLogin = async (e) => {
   //   e.preventDefault();
   //   console.log('logging in with', username, password)
@@ -46,22 +55,24 @@ const App = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-      try {
-        const user = "simple user"
-        console.log('Logging in with', user);
-        
-      window.localStorage.setItem(
-        'loggedBloglistUser', JSON.stringify(user))
-      
-      setUser(user)
+    // MOCK SIGN-IN
+    const simpleuser = "a";
+    const simplepassword = "aa";
+  
+    try {
+      if (username !== simpleuser || password !== simplepassword) {
+        throw new Error("Wrong credentials"); 
+      }
+      setUser(username);
+      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(username));
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setMessage('Wrong credentials')
+
       setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+        setMessage(null)
+      }, 8000)
     }
   }
 
@@ -71,10 +82,31 @@ const App = () => {
     window.localStorage.clear()
   }
 
+  const handleTitle = (e) => 
+    setTitle(e.target.value)
+
+  const handleAuthor = (e) => 
+    setAuthor(e.target.value)
+
+  const handleUrl = (e) => 
+    setUrl(e.target.value)
+
+  const handlePost = (e) => {
+    e.preventDefault();
+    setMessage(`A new blog ${title} by ${author} added`)
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+    setTitle("")
+    setAuthor("")
+    setUrl("")
+  }
+
   if (user === null) {
     return (
       <div>
         <h2>Log in to application</h2>
+          <Notification message={message} color="red"/>
           <Form 
           username={username} 
           password={password}
@@ -89,10 +121,18 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={message} color="green" />
       <LogoutButton user={user} handleLogout={handleLogout}/>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog}/>
-      )}
+      <BlogRender blogs={blogs}/>
+      <h2>create new</h2>
+      <BlogForm 
+      title={title} 
+      author={author} 
+      url={url}
+      handleTitle={handleTitle} 
+      handleAuthor={handleAuthor} 
+      handleUrl={handleUrl} 
+      handlePost={handlePost}/>
     </div>
   )
 }
