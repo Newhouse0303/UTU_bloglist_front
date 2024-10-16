@@ -19,23 +19,41 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      //noteService.setToken(user.token)
+    }
+  }, [])
+
   const handleName = (e) => 
     setUsername(e.target.value)
-    console.log(username);
 
   const handlePassword = (e) => 
     setPassword(e.target.value)
-  console.log(password);
   
   // Authentification logic here 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    console.log('logging in with', username, password)
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   console.log('logging in with', username, password)
 
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
+  //   try {
+  //     const user = await loginService.login({
+  //       username, password,
+  //     })
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+      try {
+        const user = "simple user"
+        console.log('Logging in with', user);
+        
+      window.localStorage.setItem(
+        'loggedBloglistUser', JSON.stringify(user))
+      
       setUser(user)
       setUsername('')
       setPassword('')
@@ -47,10 +65,11 @@ const App = () => {
     }
   }
 
-  const handleLogout = (e) => 
-    // clear local memory 
-    // return to login page
+  const handleLogout = (e) => {
+    console.log("logging out", user)
     setUser(null)
+    window.localStorage.clear()
+  }
 
   if (user === null) {
     return (
