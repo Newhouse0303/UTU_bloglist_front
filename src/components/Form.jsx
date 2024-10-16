@@ -1,5 +1,5 @@
 const Form = ({
-    userName,
+    username,
     password, 
     handleLogin, 
     handleName, 
@@ -8,7 +8,7 @@ const Form = ({
       <form onSubmit={handleLogin}>
         <div>
             username:
-            <input type="text" value={userName} onChange={handleName} />
+            <input type="text" value={username} onChange={handleName} />
         </div>
         <div>
             password:
