@@ -7,10 +7,10 @@ import loginService from './services/login'
 
 
 const App = () => {
-  const [blogs, setNewBlog] = useState([])
+  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState("user")
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
@@ -22,13 +22,10 @@ const App = () => {
   const handleName = (e) => 
     setUsername(e.target.value)
     console.log(username);
-    
 
   const handlePassword = (e) => 
     setPassword(e.target.value)
   console.log(password);
-
-
   
   // Authentification logic here 
   const handleLogin = async (e) => {
@@ -48,8 +45,6 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
-
-    
   }
 
   const handleLogout = (e) => 

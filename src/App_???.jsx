@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Form from './components/Form'
-import LoginButton from './components/LoginButton'
+import LoginButton from './components/LogoutButton'
 import blogService from './services/blogs'
 
 const App = () => {
