@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Form from './components/Form'
-import LoginButton from './components/LoginButton'
+import LogoutButton from './components/LogoutButton'
 import blogService from './services/blogs'
+import loginService from './services/login'
+
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setNewBlog] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  useEffect(() => {
+    blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    )  
+  }, [])
 
   const handleName = (e) => 
     setUsername(e.target.value)
@@ -19,28 +28,34 @@ const App = () => {
     setPassword(e.target.value)
   console.log(password);
 
+
+  
+  // Authentification logic here 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log('logging in with', username, password)
+
+    try {
+      const user = await loginService.login({
+        username, password,
+      })
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+
+    
+  }
+
   const handleLogout = (e) => 
     // clear local memory 
     // return to login page
     setUser(null)
-  
-  // Authentification logic here 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    
-    if (username === "Sara" && password === "123") {
-      setUser(username);
-    } else {
-      console.log("Username or password not valid");
-    }
-  };
-  
-
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
 
   if (user === null) {
     return (
@@ -60,7 +75,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <LoginButton user={user} handleLogout={handleLogout}/>
+      <LogoutButton user={user} handleLogout={handleLogout}/>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog}/>
       )}
