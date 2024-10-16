@@ -4,8 +4,6 @@ import Form from './components/Form'
 import LoginButton from './components/LoginButton'
 import blogService from './services/blogs'
 
-
-
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
@@ -27,7 +25,7 @@ const App = () => {
     setUser(null)
   
   // Authentification logic here 
-  const checkPassword = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     
     if (username === "Sara" && password === "123") {
@@ -51,7 +49,7 @@ const App = () => {
           <Form 
           username={username} 
           password={password}
-          checkPassword={checkPassword}
+          handleLogin={handleLogin}
           handleName={handleName}
           handlePassword={handlePassword}
           />

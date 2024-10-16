@@ -1,22 +1,18 @@
 const Form = ({
     userName,
     password, 
-    checkPassword, 
+    handleLogin, 
     handleName, 
     handlePassword }) => {
     return (
-      <form onSubmit={checkPassword}>
+      <form onSubmit={handleLogin}>
         <div>
-          <label>
             username:
-            <input value={userName} onChange={handleName} />
-          </label>
+            <input type="text" value={userName} onChange={handleName} />
         </div>
         <div>
-          <label>
             password:
-            <input value={password} onChange={handlePassword} />
-          </label>
+            <input type="password" value={password} onChange={handlePassword} />
         </div>
         <div>
           <button type="submit">login</button>
