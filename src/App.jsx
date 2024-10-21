@@ -14,7 +14,6 @@ const App = () => {
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null)
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
@@ -61,7 +60,7 @@ const App = () => {
   
     try {
       if (username !== simpleuser || password !== simplepassword) {
-        throw new Error("Wrong credentials"); 
+        throw new Error("Wrong credentials, try again"); 
       }
       setUser(username);
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(username));
@@ -69,9 +68,12 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       setMessage('Wrong credentials')
+     
 
       setTimeout(() => {
         setMessage(null)
+        setUsername('')
+        setPassword('')
       }, 8000)
     }
   }
