@@ -82,7 +82,7 @@ const App = () => {
     
     try {
       const createdBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(createdBlog))
+      setBlogs(blogs.concat(createdBlog).sort((a, b) => b.likes - a.likes))
       setMessage(`A new blog ${title} by ${author} added`)
       // setTitle("")
       // setAuthor("")
@@ -109,7 +109,8 @@ const App = () => {
     
     try {
       const updatedBlog = await blogService.increaseLikes(blog);
-      setBlogs(blogs.map(b => (b.id === updatedBlog.id ? updatedBlog : b)));
+      let updatedBlogs = blogs.map(b => (b.id === updatedBlog.id ? updatedBlog : b))
+      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes));
     } catch (error) {
       // Handle any errors that occurred during the like increase
       console.error('Failed to increase likes:', error);
@@ -150,7 +151,7 @@ const App = () => {
       <Toggleable buttonLabel={'create'}>
       <BlogForm handlePost={handlePost}/>
       </Toggleable>
-      <BlogRender blogs={blogs} handleLikes={handleLikes} handleRemove={handleRemove}/>
+      <BlogRender blogs={blogs} handleLikes={handleLikes} handleRemove={handleRemove} user={user}/>
     </div>
   )
 
