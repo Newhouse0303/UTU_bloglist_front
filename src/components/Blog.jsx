@@ -1,6 +1,5 @@
-//import '../Blog.css';
-import '../index.css'
-import PropTypes from 'prop-types';
+// import '../index.css'
+//import PropTypes from 'prop-types';
 
 
 const Blog = ({ blog, handleLikes, handleRemove, user }) => (
@@ -24,18 +23,18 @@ const Blog = ({ blog, handleLikes, handleRemove, user }) => (
   </div>
 );
 
-Blog.propTypes = {
-  blog: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    likes: PropTypes.number.isRequired,
-    user: PropTypes.string.isRequired, // this will fail as the blog.user is not populated 
-    id: PropTypes.string.isRequired,
-  }).isRequired,
-  handleLikes: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
-  user: PropTypes.string.isRequired 
-};
+// Blog.propTypes = {
+//   blog: PropTypes.shape({
+//     title: PropTypes.string.isRequired,
+//     author: PropTypes.string.isRequired,
+//     url: PropTypes.string.isRequired,
+//     likes: PropTypes.number.isRequired,
+//     user: PropTypes.string.isRequired, // this will fail as the blog.user is not populated 
+//     id: PropTypes.string.isRequired,
+//   }).isRequired,
+//   handleLikes: PropTypes.func.isRequired,
+//   handleRemove: PropTypes.func.isRequired,
+//   user: PropTypes.string.isRequired 
+// };
 export default Blog;
 
