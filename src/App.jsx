@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
-import Form from './components/Form'
+import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import BlogRender from './components/BlogRender'
 import Notification from './components/Notification'
 import LogoutButton from './components/LogoutButton'
 import blogService from './services/blogs'
-import loginService from './services/login'
+import Toggleable from './components/Toggleable'
+import Header from './components/Header'
+// import loginService from './services/login'
 
 
 const App = () => {
@@ -17,8 +19,6 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
-
-
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -34,12 +34,6 @@ const App = () => {
       //noteService.setToken(user.token)
     }
   }, [])
-
-  const handleName = (e) => 
-    setUsername(e.target.value)
-
-  const handlePassword = (e) => 
-    setPassword(e.target.value)
   
   // Authentification logic here 
 
@@ -79,64 +73,65 @@ const App = () => {
   }
 
   const handleLogout = (e) => {
-    console.log("logging out", user)
     setUser(null)
     window.localStorage.clear()
   }
 
-  const handleTitle = (e) => 
-    setTitle(e.target.value)
+  const handlePost = async (newBlog) => {
+    console.log("This should be added to the DB: ", newBlog);
+    
+    try {
+      const createdBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(createdBlog))
+      setMessage(`A new blog ${title} by ${author} added`)
+      // setTitle("")
+      // setAuthor("")
+      // setUrl("")
 
-  const handleAuthor = (e) => 
-    setAuthor(e.target.value)
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
 
-  const handleUrl = (e) => 
-    setUrl(e.target.value)
-
-  const handlePost = (e) => {
-    e.preventDefault();
-    setMessage(`A new blog ${title} by ${author} added`)
-    setTimeout(() => {
-      setMessage(null);
-    }, 5000);
-    setTitle("")
-    setAuthor("")
-    setUrl("")
+    } catch (error) {
+      setMessage('Blog could not be added')
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+    }
+    
+    // setTitle("")
+    // setAuthor("")
+    // setUrl("")
   }
 
   if (user === null) {
     return (
       <div>
-        <h2>Log in to application</h2>
+          <Toggleable buttonLabel='login'>
           <Notification message={message} color="red"/>
-          <Form 
-          username={username} 
-          password={password}
-          handleLogin={handleLogin}
-          handleName={handleName}
-          handlePassword={handlePassword}
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsername={({ target }) => setUsername(target.value)}
+            handlePassword={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
           />
-      </div>
+          </Toggleable>
+        </div>
     )
   }
 
   return (
     <div>
-      <h2>blogs</h2>
+      <Header header={"Blogs"}/>
       <Notification message={message} color="green" />
       <LogoutButton user={user} handleLogout={handleLogout}/>
+      <Toggleable buttonLabel={'create'}>
+      <BlogForm handlePost={handlePost}/>
+      </Toggleable>
       <BlogRender blogs={blogs}/>
-      <h2>create new</h2>
-      <BlogForm 
-      title={title} 
-      author={author} 
-      url={url}
-      handleTitle={handleTitle} 
-      handleAuthor={handleAuthor} 
-      handleUrl={handleUrl} 
-      handlePost={handlePost}/>
     </div>
   )
-}
 
+}
 export default App

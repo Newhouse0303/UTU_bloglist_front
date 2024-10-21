@@ -9,5 +9,10 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+const create = async (newBlog) => {
+  const response = await axios.post(baseUrl, newBlog)
+  return response.data
+}
+
+export default { getAll, create }
 
