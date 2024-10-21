@@ -14,5 +14,21 @@ const create = async (newBlog) => {
   return response.data
 }
 
-export default { getAll, create }
+const increaseLikes = async (blog) => {
+  const blogId = blog.id
+  const updatedBlog = {
+    ...blog, likes: blog.likes + 1
+  }
+
+  try {
+    const response = await axios.put(`${baseUrl}/${blogId}`, updatedBlog)
+    return response.data;
+  } catch (error) {
+    console.error(`The the likes in ${blog.title} should have been increased by one`)
+    throw error;
+  }
+ 
+}
+
+export default { getAll, create, increaseLikes }
 

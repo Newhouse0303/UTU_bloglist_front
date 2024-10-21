@@ -16,9 +16,9 @@ const App = () => {
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null);
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
+  // const [title, setTitle] = useState("")
+  // const [author, setAuthor] = useState("")
+  // const [url, setUrl] = useState("")
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -104,6 +104,43 @@ const App = () => {
     // setUrl("")
   }
 
+  const handleLikes = async (blog) => {
+    console.log("this works");
+    
+    try {
+      const updatedBlog = await blogService.increaseLikes(blog);
+      setBlogs(blogs.map(b => (b.id === updatedBlog.id ? updatedBlog : b)));
+    } catch (error) {
+      // Handle any errors that occurred during the like increase
+      console.error('Failed to increase likes:', error);
+    }
+  };
+  
+
+
+  // handleLikes = async (blog) => {
+  //   console.log("Likes should increase by one");
+    
+  //   try {
+  //     const increaseLikes = await blogService.put(blog)
+  //     setBlogs(blogs.concat(createdBlog))
+  //     setMessage(`A new blog ${title} by ${author} added`)
+  //     // setTitle("")
+  //     // setAuthor("")
+  //     // setUrl("")
+
+  //     setTimeout(() => {
+  //       setMessage(null);
+  //     }, 5000);
+
+  //   } catch (error) {
+  //     setMessage('Blog could not be added')
+  //     setTimeout(() => {
+  //       setMessage(null);
+  //     }, 5000);
+  //   }
+  // }
+
   if (user === null) {
     return (
       <div>
@@ -129,7 +166,7 @@ const App = () => {
       <Toggleable buttonLabel={'create'}>
       <BlogForm handlePost={handlePost}/>
       </Toggleable>
-      <BlogRender blogs={blogs}/>
+      <BlogRender blogs={blogs} handleLikes={handleLikes}/>
     </div>
   )
 
