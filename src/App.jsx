@@ -105,7 +105,7 @@ const App = () => {
   }
 
   const handleLikes = async (blog) => {
-    console.log("this works");
+    console.log("likes work");
     
     try {
       const updatedBlog = await blogService.increaseLikes(blog);
@@ -116,31 +116,15 @@ const App = () => {
     }
   };
   
-
-
-  // handleLikes = async (blog) => {
-  //   console.log("Likes should increase by one");
+  const handleRemove = async (blog) => {
+    try {
+      await blogService.remove(blog);
+      setBlogs(blogs.filter((b) => b.id !== blog.id))
+    } catch (error) {
+      console.error("Failed to remove blog", error)
+    }
+  }
     
-  //   try {
-  //     const increaseLikes = await blogService.put(blog)
-  //     setBlogs(blogs.concat(createdBlog))
-  //     setMessage(`A new blog ${title} by ${author} added`)
-  //     // setTitle("")
-  //     // setAuthor("")
-  //     // setUrl("")
-
-  //     setTimeout(() => {
-  //       setMessage(null);
-  //     }, 5000);
-
-  //   } catch (error) {
-  //     setMessage('Blog could not be added')
-  //     setTimeout(() => {
-  //       setMessage(null);
-  //     }, 5000);
-  //   }
-  // }
-
   if (user === null) {
     return (
       <div>
@@ -166,7 +150,7 @@ const App = () => {
       <Toggleable buttonLabel={'create'}>
       <BlogForm handlePost={handlePost}/>
       </Toggleable>
-      <BlogRender blogs={blogs} handleLikes={handleLikes}/>
+      <BlogRender blogs={blogs} handleLikes={handleLikes} handleRemove={handleRemove}/>
     </div>
   )
 

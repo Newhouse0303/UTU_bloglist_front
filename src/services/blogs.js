@@ -15,20 +15,27 @@ const create = async (newBlog) => {
 }
 
 const increaseLikes = async (blog) => {
-  const blogId = blog.id
   const updatedBlog = {
     ...blog, likes: blog.likes + 1
   }
 
   try {
-    const response = await axios.put(`${baseUrl}/${blogId}`, updatedBlog)
+    const response = await axios.put(`${baseUrl}/${blog.id}`, updatedBlog)
     return response.data;
   } catch (error) {
-    console.error(`The the likes in ${blog.title} should have been increased by one`)
+    console.error(`The likes in ${blog.title} should have been increased by one`)
     throw error;
   }
  
 }
 
-export default { getAll, create, increaseLikes }
+const remove = async (blog) => {
+  try {
+    await axios.delete(`${baseUrl}/${blog.id}`)
+  } catch (error) {
+  console.error("The blog could not be removed")
+  }
+}
+
+export default { getAll, create, increaseLikes, remove }
 
